@@ -78,3 +78,9 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .text-admin-h1 {
+    @apply text-4xl font-bold mb-6;
+  }
+}

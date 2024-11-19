@@ -32,7 +32,7 @@ const AdminNavbar = () => {
 	const router = useRouter();
 
 	return (
-		<aside className="p-1 min-h-screen bg-gray-100 flex flex-col justify-between">
+		<aside className="flex-none p-1 min-h-screen bg-gray-100 flex flex-col justify-between">
 			<nav className="flex flex-col gap-1 justify-between">
 				<div className="bg-primary text-white p-1 flex flex-col gap-4">
 					<Link href={"/"}>

@@ -10,7 +10,7 @@ const RootLayout = ({
 		<>
 			<div className="flex">
 				<AdminNavbar />
-				<main>{children}</main>
+				<main className="flex-1 w-full">{children}</main>
 			</div>
 		</>
 	);
