@@ -21,23 +21,25 @@ const RootNavbar = () => {
 	return (
 		<header
 			className={cn(
-				"container py-2 flex items-center justify-between sticky top-0 z-50 transition-colors duration-300",
+				"py-2 sticky top-0 z-50 transition-colors duration-300",
 				isScrolled
 					? "bg-white text-gray-900 shadow-md"
 					: "bg-transparent text-white"
 			)}
 		>
-			<Link href={"/"} className="relative w-12 h-12 rounded-xl">
-				<Image
-					src={SoulePsycleLogo}
-					alt="soule-psycle-logo"
-					fill
-					className="rounded-xl object-cover"
-				/>
-			</Link>
-			<nav className="">
-				<RootNavLinks />
-			</nav>
+			<div className="container flex items-center justify-between">
+				<Link href={"/"} className="relative w-12 h-12 rounded-xl">
+					<Image
+						src={SoulePsycleLogo}
+						alt="soule-psycle-logo"
+						fill
+						className="rounded-xl object-cover"
+					/>
+				</Link>
+				<nav className="">
+					<RootNavLinks />
+				</nav>
+			</div>
 		</header>
 	);
 };
