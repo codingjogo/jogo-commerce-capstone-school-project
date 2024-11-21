@@ -1,0 +1,10 @@
+
+// Implement Clerk webhooks
+
+
+
+# step 1 - integrate neon and clerk auth with prisma:
+# step 2 - implement webhooks for checking signing in/up:
+# step 3 - implement middleware for role authorization:
+# step 4 - :
+# step 5:
