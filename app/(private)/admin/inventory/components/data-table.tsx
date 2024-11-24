@@ -78,7 +78,7 @@ export function DataTable<TData, TValue>({
 								.getColumn("name")
 								?.setFilterValue(event.target.value)
 						}
-						className="max-w-sm"
+						className="max-w-sm bg-white"
 					/>
 				</div>
 				<Button asChild>
