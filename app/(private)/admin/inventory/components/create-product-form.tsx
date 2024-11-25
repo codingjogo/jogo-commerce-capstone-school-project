@@ -74,10 +74,10 @@ const CreateProductForm = ({ categories }: { categories: category[] }) => {
 		data: TCreateProduct
 	) => {
 		try {
-			const newProduct = await createProduct(data);
+			await createProduct(data);
 			alert("Product created successfully!");
-
-			return newProduct;
+			router.refresh();
+			router.push("/admin/inventory");
 		} catch (error) {
 			alert("Failed to create product");
 			console.error(error);
@@ -94,8 +94,8 @@ const CreateProductForm = ({ categories }: { categories: category[] }) => {
 		append: variantColorAppend,
 		remove: variantColorRemove,
 	} = useFieldArray({
-		control: form.control, // control props comes from useForm (optional: if you are using FormProvider)
-		name: "product_variant_color", // unique name for your Field Array
+		control: form.control,
+		name: "product_variant_color",
 	});
 
 	const nameValue = form.watch("name");
@@ -127,8 +127,8 @@ const CreateProductForm = ({ categories }: { categories: category[] }) => {
 										<Input
 											placeholder="auto-generated slug"
 											{...field}
-											value={slugValue} // Controlled value
-											readOnly // Prevent direct editing
+											value={slugValue}
+											readOnly 
 										/>
 									</FormControl>
 									<FormMessage />

@@ -48,3 +48,9 @@ export const createProductSchema = z.object({
 });
 
 export type TCreateProduct = z.infer<typeof createProductSchema>;
+
+export const deleteProductSchema = z.object({
+	id: z.string().uuid(),
+})
+
+export type TDeleteProduct = z.infer<typeof deleteProductSchema>;

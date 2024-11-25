@@ -17,7 +17,7 @@ model product {
   description           String
   price                 Float                   @db.Real
   status                PRODUCT_STATUS
-  slug                  String
+  slug                  String                  @unique
   code                  String
   category_id           String                  @db.Uuid
   category              category                @relation(fields: [category_id], references: [id], onDelete: Cascade)

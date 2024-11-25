@@ -7,7 +7,7 @@ export const NAV_LINKS  = [
 		icon: HomeIcon,
 	},
 	{
-		href: "/shop",
+		href: "/shop/products",
 		label: "Shop",
 		icon: StoreIcon,
 	},
