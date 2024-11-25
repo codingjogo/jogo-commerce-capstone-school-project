@@ -36,10 +36,13 @@ const ColorSizes = ({ control, colorIdx }: ColorSizesProps) => {
 		fields: sizeFields,
 		append: sizeAppend,
 		remove: sizeRemove,
-	} = useFieldArray<TCreateProduct, `variant_colors.${number}.sizes`>({
+	} = useFieldArray<
+		TCreateProduct,
+		`product_variant_color.${number}.product_variant_size`
+	>({
 		control,
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		name: `variant_colors.${colorIdx}.sizes` as any,
+		name: `product_variant_color.${colorIdx}.product_variant_size` as any,
 	});
 
 	// Track selected sizes
@@ -94,7 +97,7 @@ const ColorSizes = ({ control, colorIdx }: ColorSizesProps) => {
 
 						<FormField
 							control={control}
-							name={`variant_colors.${colorIdx}.sizes.${sizeIdx}.size`}
+							name={`product_variant_color.${colorIdx}.product_variant_size.${sizeIdx}.size`}
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Size</FormLabel>
@@ -132,7 +135,7 @@ const ColorSizes = ({ control, colorIdx }: ColorSizesProps) => {
 
 						<FormField
 							control={control}
-							name={`variant_colors.${colorIdx}.sizes.${sizeIdx}.stock`}
+							name={`product_variant_color.${colorIdx}.product_variant_size.${sizeIdx}.stock`}
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Stock #{sizeIdx + 1}</FormLabel>
@@ -156,7 +159,7 @@ const ColorSizes = ({ control, colorIdx }: ColorSizesProps) => {
 						/>
 						<FormField
 							control={control}
-							name={`variant_colors.${colorIdx}.sizes.${sizeIdx}.status`}
+							name={`product_variant_color.${colorIdx}.product_variant_size.${sizeIdx}.status`}
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Status #{sizeIdx + 1}</FormLabel>

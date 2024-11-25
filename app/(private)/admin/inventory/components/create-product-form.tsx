@@ -2,7 +2,7 @@
 
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
+import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -15,12 +15,19 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import ColorImagesUploader from "./color-images-uploader";
 import ColorSizes from "./color-sizes";
 import { PlusCircleIcon, Trash2Icon } from "lucide-react";
-import { isNumberKey } from "@/lib/helper";
+import { isNumberKey, slugify } from "@/lib/helper";
 import {
 	createProductSchema,
 	PRODUCT_SIZES,
@@ -28,43 +35,59 @@ import {
 	SIZE_STATUS,
 	TCreateProduct,
 } from "@/lib/schemas/productFormSchemas";
+import { createProduct } from "../_actions";
+import { category } from "@prisma/client";
 
-const initialValues = {
-	category: "",
-	name: "",
-	code: "",
-	price: 0,
-	stock: 0,
-	status: PRODUCT_STATUS.ACTIVE,
-	description: "",
-	variant_colors: [
-		{
-			color: "",
-			images: ["iiwvxsonkgwgfarjnjtz", "lk2tow5ndjdh3xpzq6gx"],
-			sizes: [
-				{
-					stock: 0,
-					status: SIZE_STATUS.AVAILABLE,
-					size: "" as PRODUCT_SIZES,
-				},
-			],
-		},
-	],
-};
+// Your missing @props are: categories
+const CreateProductForm = ({ categories }: { categories: category[] }) => {
+	const [slug, setSlug] = React.useState("");
 
-const CreateProductForm = () => {
 	const router = useRouter();
 
 	const form = useForm<TCreateProduct>({
 		resolver: zodResolver(createProductSchema),
-		defaultValues: initialValues,
+		defaultValues: {
+			name: "test-name",
+			description: "test-descriptions",
+			category_id: "",
+			price: 123,
+			status: "ACTIVE" as PRODUCT_STATUS,
+			slug,
+			code: "test-code",
+			product_variant_color: [
+				{
+					color: "test-color",
+					images: [],
+					product_variant_size: [
+						{
+							size: "M" as PRODUCT_SIZES,
+							stock: 0,
+							status: SIZE_STATUS.AVAILABLE,
+						},
+					],
+				},
+			],
+		},
 	});
 
-	// 2. Define a submit handler.
-	async function onSubmit(values: TCreateProduct) {
-		const validatedValues = createProductSchema.safeParse(values);
-		console.log("validatedValues", validatedValues);
-	}
+	const onSubmit: SubmitHandler<TCreateProduct> = async (
+		data: TCreateProduct
+	) => {
+		try {
+			const newProduct = await createProduct(data);
+			alert("Product created successfully!");
+
+			return newProduct;
+		} catch (error) {
+			alert("Failed to create product");
+			console.error(error);
+		}
+	};
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const onError = (error: any) => {
+		console.error(error);
+	};
 
 	const {
 		fields: variantColorFields,
@@ -72,8 +95,15 @@ const CreateProductForm = () => {
 		remove: variantColorRemove,
 	} = useFieldArray({
 		control: form.control, // control props comes from useForm (optional: if you are using FormProvider)
-		name: "variant_colors", // unique name for your Field Array
+		name: "product_variant_color", // unique name for your Field Array
 	});
+
+	const nameValue = form.watch("name");
+	const slugValue = slugify(nameValue);
+
+	React.useEffect(() => {
+		form.setValue("slug", slugValue, { shouldValidate: true });
+	}, [nameValue, form, slugValue]);
 
 	return (
 		<Card>
@@ -83,22 +113,61 @@ const CreateProductForm = () => {
 			<CardContent>
 				<Form {...form}>
 					<form
-						onSubmit={form.handleSubmit(onSubmit)}
+						onSubmit={form.handleSubmit(onSubmit, onError)}
 						className="space-y-8"
 					>
+						{/* Hidden Slug */}
+						<FormField
+							control={form.control}
+							name="slug"
+							render={({ field }) => (
+								<FormItem className="hidden">
+									<FormLabel>Slug</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="auto-generated slug"
+											{...field}
+											value={slugValue} // Controlled value
+											readOnly // Prevent direct editing
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 						<div className="grid lg:grid-cols-2 gap-2">
+							{/* <div className="grid gap-2">
+											<FormLabel>Category</FormLabel>
+											<Button className="w-fit" variant={'secondary'} type="button" size={'sm'} onClick={() => router.push('/admin/inventory/categories/create')}><PlusCircleIcon /></Button>
+										</div> */}
 							<FormField
 								control={form.control}
-								name="category"
+								name="category_id"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Category</FormLabel>
-										<FormControl>
-											<Input
-												placeholder="Category"
-												{...field}
-											/>
-										</FormControl>
+										<FormLabel>Email</FormLabel>
+										<Select
+											onValueChange={field.onChange}
+											defaultValue={field.value}
+										>
+											<FormControl>
+												<SelectTrigger>
+													<SelectValue placeholder="Select a verified email to display" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												{categories.map((category) => {
+													return (
+														<SelectItem
+															key={category.id}
+															value={category.id.toString()}
+														>
+															{category.name}
+														</SelectItem>
+													);
+												})}
+											</SelectContent>
+										</Select>
 										<FormMessage />
 									</FormItem>
 								)}
@@ -113,6 +182,12 @@ const CreateProductForm = () => {
 											<Input
 												placeholder="Name"
 												{...field}
+												onChange={(e) => {
+													field.onChange(
+														e.target.value
+													);
+													setSlug(e.target.value);
+												}}
 											/>
 										</FormControl>
 										<FormMessage />
@@ -155,7 +230,12 @@ const CreateProductForm = () => {
 												}
 												onKeyDown={(e) => {
 													// Prevent invalid keys based on your isNumberKey function
-													if (!isNumberKey(field.value.toString(), e)) {
+													if (
+														!isNumberKey(
+															field.value.toString(),
+															e
+														)
+													) {
 														e.preventDefault();
 													}
 												}}
@@ -220,7 +300,7 @@ const CreateProductForm = () => {
 											<div className="grid lg:grid-cols-2 gap-2">
 												<FormField
 													control={form.control}
-													name={`variant_colors.${colorIdx}.color`}
+													name={`product_variant_color.${colorIdx}.color`}
 													render={({ field }) => (
 														<FormItem>
 															<FormLabel>
@@ -262,18 +342,19 @@ const CreateProductForm = () => {
 														variantColorAppend({
 															color: "",
 															images: [],
-															sizes: [
-																{
-																	stock: 0,
-																	status: SIZE_STATUS.AVAILABLE,
-																	size: "" as PRODUCT_SIZES,
-																},
-															],
+															product_variant_size:
+																[
+																	{
+																		stock: 0,
+																		status: SIZE_STATUS.AVAILABLE,
+																		size: "" as PRODUCT_SIZES,
+																	},
+																],
 														})
 													}
 													className="w-full"
 												>
-													<PlusCircleIcon /> Add Color
+													<PlusCircleIcon /> Add Variant Color
 												</Button>
 											)}
 										</div>

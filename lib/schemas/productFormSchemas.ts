@@ -20,27 +20,31 @@ export enum PRODUCT_SIZES {
 	XXL = "XXL",
 }
 
-export const createProductVariantColorSizesSchema = z.object({
+export const createProductVariantSize = z.object({
 	size: z.nativeEnum(PRODUCT_SIZES),
-	stock: z.coerce.number().min(1, "required stock"),
-	status: z.nativeEnum(SIZE_STATUS),
+  stock: z.coerce.number().min(1, "stock is required"),
+  status: z.nativeEnum(SIZE_STATUS),
+})
+
+export type TCreateProductVariantSize = z.infer<typeof createProductVariantSize>;
+
+export const createProductVariantColor = z.object({
+	color: z.string().min(1, "color is required"),
+	images: z.array(z.string()).min(1, "images is required"),
+	product_variant_size: z.array(createProductVariantSize)
 });
 
-export const createProductVariantColorSchema = z.object({
-	color: z.string().min(1, "required color"),
-	images: z.array(z.string()).min(1, "required images"),
-	sizes: z.array(createProductVariantColorSizesSchema),
-});
+export type TCreateProductVariantColor = z.infer<typeof createProductVariantColor>;
 
 export const createProductSchema = z.object({
-	category: z.string().min(1, "required category"),
-	name: z.string().min(1, "required name"),
-	code: z.string().min(1, "required code"),
-	price: z.coerce.number().min(1, "required price"),
-	stock: z.coerce.number().min(1, "required stock"),
+	name: z.string().min(1, "name is required"),
+	category_id: z.string().uuid(),
+	description: z.string().min(1, "description is required"),
+	price: z.coerce.number().min(1, "price is required"),
 	status: z.nativeEnum(PRODUCT_STATUS),
-	description: z.string().min(1, "required description"),
-	variant_colors: z.array(createProductVariantColorSchema),
+	slug: z.string().min(1, "slug is required"),
+	code: z.string().min(1, "code is required"),
+	product_variant_color: z.array(createProductVariantColor),
 });
 
 export type TCreateProduct = z.infer<typeof createProductSchema>;

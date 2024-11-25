@@ -16,13 +16,13 @@ interface ColorImagesProps {
 const ColorImagesUploader = ({ control, colorIdx }: ColorImagesProps) => {
 	const watchImages = useWatch({
 		control,
-		name: `variant_colors.${colorIdx}.images` as const,
+		name: `product_variant_color.${colorIdx}.images` as const,
 	});
 
 	const { append: colorImageAppend } = useFieldArray({
 		control,
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		name: `variant_colors.${colorIdx}.images` as any,
+		name: `product_variant_color.${colorIdx}.images` as any,
 	});
 
 	return (
