@@ -35,7 +35,8 @@ const ProductDeleteButton = ({productId} : {
 		values: TDeleteProduct
 	) => {
 		try {
-			await deleteProduct(values);
+		const validatedValues = deleteProductSchema.parse(values);
+			await deleteProduct(validatedValues);
 			alert("Deleted a product");
 		} catch (error) {
 			console.error("Failed to delete product", error);

@@ -113,6 +113,9 @@ const ColorSizes = ({ control, colorIdx }: ColorSizesProps) => {
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
+											<SelectItem disabled={true} value="default-value">
+												Select a size
+											</SelectItem>
 											{Object.values(PRODUCT_SIZES).map(
 												(size) => (
 													<SelectItem

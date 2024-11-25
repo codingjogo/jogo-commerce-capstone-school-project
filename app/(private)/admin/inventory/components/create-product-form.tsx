@@ -39,7 +39,7 @@ import { createProduct } from "../_actions";
 import { category } from "@prisma/client";
 
 // Your missing @props are: categories
-const CreateProductForm = ({ categories }: { categories: category[] }) => {
+const CreateProductForm = ({ categories }: { categories: category[]; }) => {
 	const [slug, setSlug] = React.useState("");
 
 	const router = useRouter();
@@ -60,7 +60,7 @@ const CreateProductForm = ({ categories }: { categories: category[] }) => {
 					images: [],
 					product_variant_size: [
 						{
-							size: "M" as PRODUCT_SIZES,
+							size: "" as PRODUCT_SIZES,
 							stock: 0,
 							status: SIZE_STATUS.AVAILABLE,
 						},
@@ -73,14 +73,13 @@ const CreateProductForm = ({ categories }: { categories: category[] }) => {
 	const onSubmit: SubmitHandler<TCreateProduct> = async (
 		data: TCreateProduct
 	) => {
+
 		try {
-			await createProduct(data);
+			const validateValues = createProductSchema.parse(data);
+			await createProduct(validateValues);
 			alert("Product created successfully!");
-			router.refresh();
-			router.push("/admin/inventory");
 		} catch (error) {
-			alert("Failed to create product");
-			console.error(error);
+			console.log('Product Error, please try again. Product might be already created', error);
 		}
 	};
 
@@ -128,7 +127,7 @@ const CreateProductForm = ({ categories }: { categories: category[] }) => {
 											placeholder="auto-generated slug"
 											{...field}
 											value={slugValue}
-											readOnly 
+											readOnly
 										/>
 									</FormControl>
 									<FormMessage />
@@ -145,17 +144,23 @@ const CreateProductForm = ({ categories }: { categories: category[] }) => {
 								name="category_id"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Email</FormLabel>
+										<FormLabel>Category</FormLabel>
 										<Select
 											onValueChange={field.onChange}
 											defaultValue={field.value}
 										>
 											<FormControl>
 												<SelectTrigger>
-													<SelectValue placeholder="Select a verified email to display" />
+													<SelectValue placeholder="Select a category" />
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
+												<SelectItem
+													value="default-value"
+													disabled={true}
+												>
+													Select a category
+												</SelectItem>
 												{categories.map((category) => {
 													return (
 														<SelectItem
@@ -354,7 +359,8 @@ const CreateProductForm = ({ categories }: { categories: category[] }) => {
 													}
 													className="w-full"
 												>
-													<PlusCircleIcon /> Add Variant Color
+													<PlusCircleIcon /> Add
+													Variant Color
 												</Button>
 											)}
 										</div>
