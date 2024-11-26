@@ -70,10 +70,8 @@ export default function ProductList({
 	);
 
 	return (
-		<section>
-			<div className="container mx-auto px-4 py-8">
-				<h1 className="text-3xl font-bold mb-8">All Products</h1>
-				<div className="flex flex-col md:flex-row justify-between items-center mb-8 space-y-4 md:space-y-0 md:space-x-4">
+		<>
+			<div className="flex flex-col md:flex-row justify-between items-center mb-8 space-y-4 md:space-y-0 md:space-x-4">
 					<Input
 						type="text"
 						placeholder="Search products..."
@@ -156,7 +154,6 @@ export default function ProductList({
 						Next
 					</Button>
 				</div>
-			</div>
-		</section>
+		</>
 	);
 }

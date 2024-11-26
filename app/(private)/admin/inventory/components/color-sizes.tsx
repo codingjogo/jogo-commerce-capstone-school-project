@@ -160,19 +160,40 @@ const ColorSizes = ({ control, colorIdx }: ColorSizesProps) => {
 								</FormItem>
 							)}
 						/>
-						<FormField
+
+<FormField
 							control={control}
 							name={`product_variant_color.${colorIdx}.product_variant_size.${sizeIdx}.status`}
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Status #{sizeIdx + 1}</FormLabel>
-									<FormControl>
-										<Input
-											placeholder="ACTIVE"
-											{...field}
-											disabled={true}
-										/>
-									</FormControl>
+									<FormLabel>Status</FormLabel>
+									<Select
+										onValueChange={(value) =>
+											field.onChange(value)
+										}
+										defaultValue={field.value}
+									>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue placeholder="Select a status" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											<SelectItem disabled={true} value="default-value">
+												Select a status
+											</SelectItem>
+											{Object.values(SIZE_STATUS).map(
+												(status) => (
+													<SelectItem
+														key={status}
+														value={status}
+													>
+														{status}
+													</SelectItem>
+												)
+											)}
+										</SelectContent>
+									</Select>
 									<FormMessage />
 								</FormItem>
 							)}

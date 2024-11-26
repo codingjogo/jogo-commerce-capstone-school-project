@@ -1,52 +1,36 @@
-import prisma from "@/lib/db"
-import ProductList from "./components/product-list"
-
-
-async function getProducts(page: number = 1, pageSize: number = 12) {
-  const products = await prisma.product.findMany({
-    take: pageSize,
-    skip: (page - 1) * pageSize,
-    orderBy: { created_at: 'desc' },
-    include: {
-      category: {
-        select: { name: true, slug: true },
-      },
-      product_variant_color: {
-        select: { images: true },
-      },
-    },
-  })
-
-  const totalProducts = await prisma.product.count()
-
-  return { products, totalProducts }
-}
+import prisma from "@/lib/db";
+import ProductList from "./components/product-list";
+import { getProducts } from "@/lib/data/shop/products";
 
 async function getCategories() {
-  return prisma.category.findMany({
-    select: { id: true, name: true, slug: true },
-  })
+	return prisma.category.findMany({
+		select: { id: true, name: true, slug: true },
+	});
 }
 
 export default async function ProductsPage({
-  searchParams,
+	searchParams,
 }: {
-  searchParams: { page: string }
+	searchParams: { page: string };
 }) {
-  const page = parseInt(searchParams.page) || 1
-  const pageSize = 12
+	const page = parseInt(searchParams.page) || 1;
+	const pageSize = 12;
 
-  const { products, totalProducts } = await getProducts(page, pageSize)
-  const categories = await getCategories()
+	const { products, totalProducts } = await getProducts(page, pageSize);
+	const categories = await getCategories();
 
-  return (
-    <ProductList
-      initialProducts={products}
-      totalProducts={totalProducts}
-      categories={categories}
-      initialPage={page}
-      pageSize={pageSize}
-    />
-  )
+	return (
+		<section>
+			<div className="container py-8 lg:py-12">
+				<h1 className="text-4xl mb-6">Shop All Products</h1>
+				<ProductList
+					initialProducts={products}
+					totalProducts={totalProducts}
+					categories={categories}
+					initialPage={page}
+					pageSize={pageSize}
+				/>
+			</div>
+		</section>
+	);
 }
-
