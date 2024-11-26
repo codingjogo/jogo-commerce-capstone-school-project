@@ -98,7 +98,12 @@ export default function ProductList({
 				</div>
 				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 					{filteredProducts.map((product) => (
-						<Card key={product.id}>
+						<Link
+						key={product.id}
+						href={`/shop/product/${product.slug}`}
+						passHref
+					>
+						<Card>
 							<CardHeader>
 								<div className="relative aspect-square mb-2">
 									<CldImage
@@ -125,16 +130,13 @@ export default function ProductList({
 								</p>
 							</CardContent>
 							<CardFooter>
-								<Link
-									href={`/shop/product/${product.slug}`}
-									passHref
-								>
-									<Button className="w-full">
-										View Details
-									</Button>
-								</Link>
+								<Button type="button">
+									BUY NOW!
+								</Button>
 							</CardFooter>
 						</Card>
+						</Link>
+
 					))}
 				</div>
 				<div className="mt-8 flex justify-center space-x-2">

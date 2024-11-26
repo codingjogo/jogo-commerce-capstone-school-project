@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { CldImage } from 'next-cloudinary'
+import { cn } from '@/lib/utils'
 
 interface ProductDetailProps {
   product: ProductDetail
@@ -84,7 +85,10 @@ export default function ProductDetail({ product, courierOptions, reviews }: Prod
                   <RadioGroupItem value={color.id} id={`color-${color.id}`} className="sr-only" />
                   <Label
                     htmlFor={`color-${color.id}`}
-                    className="w-8 h-8 rounded-full cursor-pointer"
+                    className={cn(
+                      "w-8 h-8 rounded-full cursor-pointer",
+                      color.color === selectedColor.color && 'border-4 border-muted-foreground'
+                    )}
                     style={{ backgroundColor: color.color }}
                   />
                 </div>

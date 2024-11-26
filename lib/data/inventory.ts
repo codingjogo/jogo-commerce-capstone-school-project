@@ -4,10 +4,10 @@ import prisma from "../db";
 export async function getProductsData(): Promise<Product[]> {
 	const products = await prisma.product.findMany({
 		include: {
-			category: true, // To get the category name
+			category: true,
 			product_variant_color: {
 				include: {
-					product_variant_size: true, // Get sizes and stock for each color variant
+					product_variant_size: true,
 				},
 			},
 		},
