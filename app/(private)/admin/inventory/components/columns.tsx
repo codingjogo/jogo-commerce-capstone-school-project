@@ -21,8 +21,7 @@ export type Product = {
 	name: string;
 	price: number;
 	stock: number;
-	color: string;
-	size: string;
+	colorSize: string;
 	category: string;
 };
 
@@ -57,21 +56,16 @@ export const columns: ColumnDef<Product>[] = [
 		),
 	},
 	{
-		accessorKey: "color",
+		accessorKey: "colorSize",
 		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title="Color" />
+			<DataTableColumnHeader column={column} title="Color & Size" />
 		),
-	},
-	{
-		accessorKey: "size",
-		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title="Size" />
-		),
+		cell: ({ row }) => row.original.colorSize,
 	},
 	{
 		accessorKey: "stock",
 		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title="Stock" />
+			<DataTableColumnHeader column={column} title="Total Stock" />
 		),
 	},
 	{
@@ -105,3 +99,4 @@ export const columns: ColumnDef<Product>[] = [
 		},
 	},
 ];
+
