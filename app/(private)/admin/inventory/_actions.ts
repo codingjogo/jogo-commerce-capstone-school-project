@@ -45,6 +45,46 @@ export async function createProduct(data: TCreateProduct) {
 	redirect("/admin/inventory");
 }
 
+export async function updateProduct(id: string, data: TCreateProduct) {
+	try {
+		await prisma.product.update({
+			where: { id },
+			data: {
+				name: data.name,
+				description: data.description,
+				category_id: data.category_id,
+				price: data.price,
+				status: data.status,
+				slug: data.slug,
+				code: data.code,
+				updated_at: new Date(),
+				product_variant_color: {
+					deleteMany: {},
+					create: data.product_variant_color.map((variant) => ({
+						color: variant.color,
+						images: variant.images,
+						product_variant_size: {
+							create: variant.product_variant_size.map(
+								(size) => ({
+									size: size.size,
+									stock: size.stock,
+									status: size.status,
+								})
+							),
+						},
+					})),
+				},
+			},
+		});
+	} catch (error) {
+		console.error(`Error Updating product:`, error);
+		throw new Error("Failed to update a product");
+	}
+
+	revalidatePath("/admin/inventory");
+	redirect("/admin/inventory");
+}
+
 export async function deleteProduct(values: TDeleteProduct) {
 	try {
 		const { id } = values;

@@ -1,113 +1,129 @@
-"use client";
+	"use client";
 
-import React from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+	import React from "react";
+	import { zodResolver } from "@hookform/resolvers/zod";
+	import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+	import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { Button } from "@/components/ui/button";
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
-import ColorImagesUploader from "./color-images-uploader";
-import ColorSizes from "./color-sizes";
-import { PlusCircleIcon, Trash2Icon } from "lucide-react";
-import { isNumberKey, slugify } from "@/lib/helper";
-import {
-	createProductSchema,
-	PRODUCT_SIZES,
-	PRODUCT_STATUS,
-	SIZE_STATUS,
-	TCreateProduct,
-} from "@/lib/schemas/productFormSchemas";
-import { createProduct } from "../_actions";
-import { category } from "@prisma/client";
+	import { Button } from "@/components/ui/button";
+	import {
+		Form,
+		FormControl,
+		FormField,
+		FormItem,
+		FormLabel,
+		FormMessage,
+	} from "@/components/ui/form";
+	import {
+		Select,
+		SelectContent,
+		SelectItem,
+		SelectTrigger,
+		SelectValue,
+	} from "@/components/ui/select";
+	import { Input } from "@/components/ui/input";
+	import { useRouter } from "next/navigation";
+	import ColorImagesUploader from "./color-images-uploader";
+	import ColorSizes from "./color-sizes";
+	import { PlusCircleIcon, Trash2Icon } from "lucide-react";
+	import { isNumberKey, slugify } from "@/lib/helper";
+	import {
+		createProductSchema,
+		PRODUCT_SIZES,
+		PRODUCT_STATUS,
+		SIZE_STATUS,
+		TCreateProduct,
+	} from "@/lib/schemas/productFormSchemas";
+	import { createProduct, updateProduct } from "../_actions";
+	import { category } from "@prisma/client";
 
-// Your missing @props are: categories
-const CreateProductForm = ({ categories }: { categories: category[]; }) => {
-	const [slug, setSlug] = React.useState("");
+	// Your missing @props are: categories
+	const ProductForm = ({
+		categories,
+		product,
+	}: {
+		categories: category[];
+		product?: TCreateProduct;
+	}) => {
+		const [slug, setSlug] = React.useState("");
 
-	const router = useRouter();
+		const router = useRouter();
 
-	const form = useForm<TCreateProduct>({
-		resolver: zodResolver(createProductSchema),
-		defaultValues: {
-			name: "test-name",
-			description: "test-descriptions",
-			category_id: "",
-			price: 123,
-			status: "ACTIVE" as PRODUCT_STATUS,
-			slug,
-			code: "test-code",
-			product_variant_color: [
-				{
-					color: "test-color",
-					images: [],
-					product_variant_size: [
-						{
-							size: "" as PRODUCT_SIZES,
-							stock: 0,
-							status: SIZE_STATUS.AVAILABLE,
-						},
-					],
-				},
-			],
-		},
-	});
+		const form = useForm<TCreateProduct>({
+			resolver: zodResolver(createProductSchema),
+			defaultValues: product
+				? product
+				: {
+						name: "test-name",
+						description: "test-descriptions",
+						category_id: "",
+						price: 123,
+						status: "ACTIVE" as PRODUCT_STATUS,
+						slug,
+						code: "test-code",
+						product_variant_color: [
+							{
+								color: "test-color",
+								images: [],
+								product_variant_size: [
+									{
+										size: "" as PRODUCT_SIZES,
+										stock: 0,
+										status: SIZE_STATUS.AVAILABLE,
+									},
+								],
+							},
+						],
+					},
+		});
 
-	const onSubmit: SubmitHandler<TCreateProduct> = async (
-		data: TCreateProduct
-	) => {
+		const onSubmit: SubmitHandler<TCreateProduct> = async (
+			data: TCreateProduct
+		) => {
+			try {
+				const validateValues = createProductSchema.parse(data);
+				if (product) {
+					await updateProduct(validateValues.id!, validateValues);
+				} else {
+					await createProduct(validateValues);
+					alert("Product created successfully!");
+				}
+			} catch (error) {
+				console.log(
+					"Product Error, please try again. Product might be already created",
+					error
+				);
+			}
+		};
 
-		try {
-			const validateValues = createProductSchema.parse(data);
-			await createProduct(validateValues);
-			alert("Product created successfully!");
-		} catch (error) {
-			console.log('Product Error, please try again. Product might be already created', error);
-		}
-	};
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const onError = (error: any) => {
+			console.error(error);
+		};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const onError = (error: any) => {
-		console.error(error);
-	};
+		const {
+			fields: variantColorFields,
+			append: variantColorAppend,
+			remove: variantColorRemove,
+		} = useFieldArray({
+			control: form.control,
+			name: "product_variant_color",
+		});
 
-	const {
-		fields: variantColorFields,
-		append: variantColorAppend,
-		remove: variantColorRemove,
-	} = useFieldArray({
-		control: form.control,
-		name: "product_variant_color",
-	});
+		const nameValue = form.watch("name");
+		const slugValue = slugify(nameValue);
 
-	const nameValue = form.watch("name");
-	const slugValue = slugify(nameValue);
+		React.useEffect(() => {
+			form.setValue("slug", slugValue, { shouldValidate: true });
+		}, [nameValue, form, slugValue]);
 
-	React.useEffect(() => {
-		form.setValue("slug", slugValue, { shouldValidate: true });
-	}, [nameValue, form, slugValue]);
-
-	return (
+		return (
 		<Card>
 			<CardHeader>
-				<CardTitle className="text-admin-h1">Create Product</CardTitle>
+				<CardTitle className="text-admin-h1">
+					{product ? "Update" : "Create"} Product
+				</CardTitle>
 			</CardHeader>
 			<CardContent>
 				<Form {...form}>
@@ -323,6 +339,7 @@ const CreateProductForm = ({ categories }: { categories: category[]; }) => {
 												/>
 
 												<ColorImagesUploader
+												form={form}
 													control={form.control}
 													colorIdx={colorIdx}
 												/>
@@ -379,7 +396,7 @@ const CreateProductForm = ({ categories }: { categories: category[]; }) => {
 							>
 								Cancel
 							</Button>
-							<Button type="submit">Create</Button>
+							<Button type="submit">{product ? "Update" : "Create"}</Button>
 						</div>
 					</form>
 				</Form>
@@ -388,4 +405,4 @@ const CreateProductForm = ({ categories }: { categories: category[]; }) => {
 	);
 };
 
-export default CreateProductForm;
+export default ProductForm;

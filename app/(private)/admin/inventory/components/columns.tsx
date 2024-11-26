@@ -90,7 +90,7 @@ export const columns: ColumnDef<Product>[] = [
 						<DropdownMenuItem className="p-0 mb-2">
 							<Button className="w-full" asChild>
 								<Link
-									href={`/admin/inventory/${row.original.id}/edit`}
+									href={`/admin/inventory/${row.original.id}/update`}
 								>
 									Edit
 								</Link>

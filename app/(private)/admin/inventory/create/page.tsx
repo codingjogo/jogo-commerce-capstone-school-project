@@ -1,6 +1,6 @@
 import React from "react";
-import CreateProductForm from "../components/create-product-form";
 import prisma from "@/lib/db";
+import ProductForm from "../components/product-form";
 
 const CreateProductPage = async () => {
 
@@ -11,7 +11,7 @@ const CreateProductPage = async () => {
 	return (
 		<section>
 			<div className="p-6">
-				<CreateProductForm categories={categories} />
+				<ProductForm categories={categories} />
 			</div>
 		</section>
 	);

@@ -2,18 +2,24 @@
 
 import React from "react";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
-import { Control, useFieldArray, useWatch } from "react-hook-form";
+import {
+	Control,
+	useFieldArray,
+	UseFormReturn,
+	useWatch,
+} from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { PlusCircleIcon, Trash2 } from "lucide-react";
 import { FormLabel } from "@/components/ui/form";
 import { TCreateProduct } from "@/lib/schemas/productFormSchemas";
 
 interface ColorImagesProps {
+	form: UseFormReturn<TCreateProduct>;
 	control: Control<TCreateProduct>;
 	colorIdx: number;
 }
 
-const ColorImagesUploader = ({ control, colorIdx }: ColorImagesProps) => {
+const ColorImagesUploader = ({ form, control, colorIdx }: ColorImagesProps) => {
 	const watchImages = useWatch({
 		control,
 		name: `product_variant_color.${colorIdx}.images` as const,
@@ -40,13 +46,31 @@ const ColorImagesUploader = ({ control, colorIdx }: ColorImagesProps) => {
 								fill
 								className="object-fill"
 							/>
-							<Button
-								variant={"destructive"}
-								className="absolute h-fit -top-1 -right-1 p-1 rounded-full"
-								type="button"
-							>
-								<Trash2 />
-							</Button>
+							{watchImages.length > 1 && (
+								<Button
+									variant={"destructive"}
+									className="absolute h-fit -top-1 -right-1 p-1 rounded-full"
+									type="button"
+									onClick={() => {
+										const currentImages = form.getValues(
+											`product_variant_color.${colorIdx}.images`
+										);
+										const updatedImages =
+											currentImages.filter(
+												(_, idx) => idx !== imageIdx
+											);
+										form.setValue(
+											`product_variant_color.${colorIdx}.images`,
+											updatedImages,
+											{
+												shouldValidate: true,
+											}
+										);
+									}}
+								>
+									<Trash2 />
+								</Button>
+							)}
 						</div>
 					);
 				})}
