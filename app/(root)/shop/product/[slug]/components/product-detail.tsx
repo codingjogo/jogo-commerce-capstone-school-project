@@ -14,8 +14,9 @@ import {
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { CldImage } from "next-cloudinary";
 import { cn } from "@/lib/utils";
+import { ProductImagesCarousel } from "./product-images-carousel";
+import Reviews from "./reviews";
 
 interface ProductDetailProps {
 	product: ProductDetail;
@@ -41,10 +42,11 @@ export default function ProductDetail({
 		reviews.length;
 
 	return (
-		<div className="container mx-auto px-4 py-8">
+		<>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 				<div className="space-y-4">
-					<div className="relative aspect-square">
+					{/* Product Images */}
+					{/* <div className="relative aspect-square">
 						<CldImage
 							src={selectedColor.images[0]}
 							alt={product.name}
@@ -52,29 +54,13 @@ export default function ProductDetail({
 							className="object-cover rounded-lg"
 						/>
 					</div>
-					<div className="flex space-x-2 overflow-x-auto">
-						{selectedColor.images.map((image, index) => (
-							<CldImage
-								key={index}
-								src={image}
-								alt={`${product.name} - Image ${index + 1}`}
-								width={100}
-								height={100}
-								className="object-cover rounded-md cursor-pointer"
-								onClick={() => {
-									const newImages = [...selectedColor.images];
-									newImages.unshift(
-										newImages.splice(index, 1)[0]
-									);
-									setSelectedColor({
-										...selectedColor,
-										images: newImages,
-									});
-								}}
-							/>
-						))}
+					<h1>Image Gallery Here</h1> */}
+					<div className="aspect-square">
+					<ProductImagesCarousel />
 					</div>
 				</div>
+
+				{/* Product Details */}
 				<div className="space-y-6">
 					<h1 className="text-3xl font-bold">{product.name}</h1>
 					<div className="flex items-center space-x-2">
@@ -147,7 +133,7 @@ export default function ProductDetail({
 								)
 							}
 						>
-							<SelectTrigger className="w-32">
+							<SelectTrigger className="w-32 bg-white">
 								<SelectValue placeholder="Select size" />
 							</SelectTrigger>
 							<SelectContent>
@@ -174,7 +160,7 @@ export default function ProductDetail({
 								)
 							}
 						>
-							<SelectTrigger className="w-full">
+							<SelectTrigger className="w-full bg-white">
 								<SelectValue placeholder="Select shipping method" />
 							</SelectTrigger>
 							<SelectContent>
@@ -196,34 +182,9 @@ export default function ProductDetail({
 			</div>
 			<div className="mt-12">
 				<h2 className="text-2xl font-bold mb-4">Reviews</h2>
-				<div className="space-y-4">
-					{reviews.map((review) => (
-						<div key={review.id} className="border-b pb-4">
-							<div className="flex items-center space-x-2 mb-2">
-								<div className="flex">
-									{[1, 2, 3, 4, 5].map((star) => (
-										<StarIcon
-											key={star}
-											className={`w-4 h-4 ${
-												star <= review.rating
-													? "text-yellow-400"
-													: "text-gray-300"
-											}`}
-										/>
-									))}
-								</div>
-								<span className="font-semibold">
-									{review.userName}
-								</span>
-								<span className="text-sm text-gray-600">
-									{review.createdAt}
-								</span>
-							</div>
-							<p>{review.comment}</p>
-						</div>
-					))}
-				</div>
+				
+				<Reviews reviews={reviews} />
 			</div>
-		</div>
+		</>
 	);
 }
