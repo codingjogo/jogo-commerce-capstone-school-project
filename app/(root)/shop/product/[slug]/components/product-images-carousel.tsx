@@ -9,8 +9,11 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel"
+import { CldImage } from "next-cloudinary"
 
-export function ProductImagesCarousel() {
+export function ProductImagesCarousel({images} : {
+  images: string[]
+}) {
   const [api, setApi] = React.useState<CarouselApi>()
   const [current, setCurrent] = React.useState(0)
   const [count, setCount] = React.useState(0)
@@ -32,11 +35,16 @@ export function ProductImagesCarousel() {
     <div className="w-full">
       <Carousel setApi={setApi} className="w-full">
         <CarouselContent>
-          {Array.from({ length: 5 }).map((_, index) => (
+          {images.map((image, index) => (
             <CarouselItem key={index}>
               <Card>
-                <CardContent className="flex aspect-square items-center justify-center p-6">
-                  <span className="text-4xl font-semibold">{index + 1}</span>
+                <CardContent className="relative aspect-square">
+                  <CldImage 
+                    src={image}
+                    alt={`imaege-of-${image}-${index}`}
+                    fill
+                    className="object-cover"
+                  />
                 </CardContent>
               </Card>
             </CarouselItem>

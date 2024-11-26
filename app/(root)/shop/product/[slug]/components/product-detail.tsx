@@ -37,6 +37,10 @@ export default function ProductDetail({
 	);
 	const [selectedCourier, setSelectedCourier] = useState(courierOptions[0]);
 
+	// pass the images based on the selected variant color "red" | "green"
+
+	const images = selectedColor.images
+
 	const averageRating =
 		reviews.reduce((sum, review) => sum + review.rating, 0) /
 		reviews.length;
@@ -56,7 +60,7 @@ export default function ProductDetail({
 					</div>
 					<h1>Image Gallery Here</h1> */}
 					<div className="aspect-square">
-					<ProductImagesCarousel />
+						<ProductImagesCarousel images={images} />
 					</div>
 				</div>
 
@@ -182,7 +186,7 @@ export default function ProductDetail({
 			</div>
 			<div className="mt-12">
 				<h2 className="text-2xl font-bold mb-4">Reviews</h2>
-				
+
 				<Reviews reviews={reviews} />
 			</div>
 		</>
