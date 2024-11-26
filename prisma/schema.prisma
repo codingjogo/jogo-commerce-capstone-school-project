@@ -20,6 +20,7 @@ model product {
   slug                  String                  @unique
   code                  String
   category_id           String                  @db.Uuid
+  bag                   bag[]
   category              category                @relation(fields: [category_id], references: [id], onDelete: Cascade)
   product_variant_color product_variant_color[]
 }
@@ -38,14 +39,15 @@ model product_variant_color {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model product_variant_size {
-  id                       String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  created_at               DateTime              @default(now()) @db.Timestamptz(6)
-  updated_at               DateTime?             @db.Timestamptz(6)
-  size                     PRODUCT_SIZES
-  stock                    Int
-  status                   SIZE_STATUS
-  product_variant_color_id String                @db.Uuid
-  product_variant_color    product_variant_color @relation(fields: [product_variant_color_id], references: [id], onDelete: Cascade)
+  id                                                 String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at                                         DateTime              @default(now()) @db.Timestamptz(6)
+  updated_at                                         DateTime?             @db.Timestamptz(6)
+  size                                               PRODUCT_SIZES
+  stock                                              Int
+  status                                             SIZE_STATUS
+  product_variant_color_id                           String                @db.Uuid
+  bag_bag_product_variant_sizeToproduct_variant_size bag[]                 @relation("bag_product_variant_sizeToproduct_variant_size")
+  product_variant_color                              product_variant_color @relation(fields: [product_variant_color_id], references: [id], onDelete: Cascade)
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
@@ -56,6 +58,29 @@ model category {
   name       String
   slug       String
   product    product[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model bag {
+  id                                                                  String               @id(map: "cart_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at                                                          DateTime             @default(now()) @db.Timestamptz(6)
+  updated_at                                                          DateTime?            @db.Timestamptz(6)
+  quantity                                                            Int
+  product_id                                                          String               @db.Uuid
+  product_variant_size                                                String               @db.Uuid
+  customer_id                                                         String               @db.Uuid
+  customer                                                            customer             @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  product                                                             product              @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "cart_product_id_fkey")
+  product_variant_size_bag_product_variant_sizeToproduct_variant_size product_variant_size @relation("bag_product_variant_sizeToproduct_variant_size", fields: [product_variant_size], references: [id], onDelete: Cascade, map: "cart_product_variant_size_fkey")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model customer {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime? @db.Timestamptz(6)
+  email      String    @unique
+  bag        bag[]
 }
 
 enum SIZE_STATUS {

@@ -37,8 +37,6 @@ export default function ProductDetail({
 	);
 	const [selectedCourier, setSelectedCourier] = useState(courierOptions[0]);
 
-	// pass the images based on the selected variant color "red" | "green"
-
 	const images = selectedColor.images
 
 	const averageRating =
