@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React from "react";
 import { Button } from "@/components/ui/button";
@@ -17,12 +17,25 @@ import { Input } from "@/components/ui/input";
 import { addToBag } from "../../_actions";
 import { ShoppingBagIcon } from "lucide-react";
 
-const AddToBag = ({slug, quantity, product_id, product_variant_size_id, customer_id} : {
-	slug:string;
-  quantity: number;
-  product_id: string;
-  product_variant_size_id: string;
-  customer_id: string;
+const AddToBag = ({
+	slug,
+	quantity,
+	product_id,
+	product_variant_size_id,
+	product_variant_color_id,
+	customer_id,
+	resetOnChange
+}: {
+	slug: string;
+	quantity: number;
+	product_id: string;
+	product_variant_size_id: string;
+	product_variant_color_id: string;
+	customer_id: string;
+	resetOnChange: {
+		selectedColor: { id: string };
+		selectedSize: { id: string };
+	};
 }) => {
 	const form = useForm<TCreateBag>({
 		resolver: zodResolver(bagSchema),
@@ -30,26 +43,35 @@ const AddToBag = ({slug, quantity, product_id, product_variant_size_id, customer
 			quantity: quantity | 1,
 			product_id,
 			product_variant_size_id,
+			product_variant_color_id,
 			customer_id,
 		},
 	});
 
-	const onSubmit: SubmitHandler<TCreateBag> = async (
-		data: TCreateBag
-	) => {
+	const onSubmit: SubmitHandler<TCreateBag> = async (data: TCreateBag) => {
 		try {
-      await addToBag(data, slug);
-      alert("Product added to bag!");
-      form.reset();
-    } catch (error) {
-      console.log("ERROR_CREATING_PRODUCT", error)
-    }
+			await addToBag(data, slug);
+			alert("Product added to bag!");
+			form.reset();
+		} catch (error) {
+			console.log("ERROR_CREATING_PRODUCT", error);
+		}
 	};
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const onError = (error: any) => {
 		console.log(error);
 	};
+
+	React.useEffect(() => {
+		form.reset({
+			product_variant_size_id: resetOnChange.selectedSize.id,
+			product_variant_color_id: resetOnChange.selectedColor.id,
+			quantity,
+			product_id,
+			customer_id,
+		});
+	}, [resetOnChange, form, quantity, product_id, customer_id]);
 
 	return (
 		<Form {...form}>
@@ -104,6 +126,20 @@ const AddToBag = ({slug, quantity, product_id, product_variant_size_id, customer
 
 				<FormField
 					control={form.control}
+					name="product_variant_color_id"
+					render={({ field }) => (
+						<FormItem className="hidden">
+							<FormLabel>Variant Color ID</FormLabel>
+							<FormControl>
+								<Input placeholder="shadcn" {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
+				<FormField
+					control={form.control}
 					name="customer_id"
 					render={({ field }) => (
 						<FormItem className="hidden">
@@ -117,7 +153,8 @@ const AddToBag = ({slug, quantity, product_id, product_variant_size_id, customer
 				/>
 
 				<Button type="submit" className="w-full">
-					<ShoppingBagIcon/>Add to Bag
+					<ShoppingBagIcon />
+					Add to Bag
 				</Button>
 			</form>
 		</Form>

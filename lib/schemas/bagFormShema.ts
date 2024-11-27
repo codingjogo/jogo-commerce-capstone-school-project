@@ -5,6 +5,7 @@ export const bagSchema = z.object({
 	quantity: z.coerce.number().min(1, "at least input 1"),
 	product_id: z.string().uuid(),
 	product_variant_size_id: z.string().uuid(),
+	product_variant_color_id: z.string().uuid(),
 	customer_id: z.string().uuid(),
 });
 

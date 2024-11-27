@@ -8,12 +8,12 @@ import { z } from "zod";
 
 export async function addToBag(data: TCreateBag, slug: string) {
   try {
-
     await prisma.bag.create({
       data: {
         quantity: data.quantity,
         product_id: data.product_id,
         product_variant_size_id: data.product_variant_size_id,
+        product_variant_color_id: data.product_variant_color_id,
         customer_id: data.customer_id,
       },
     })

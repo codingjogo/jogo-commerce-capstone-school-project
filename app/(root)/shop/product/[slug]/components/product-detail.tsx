@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { type ProductDetail, CourierOption, Review } from "@/lib/types";
 import { StarIcon } from "lucide-react";
 
@@ -48,6 +48,16 @@ export default function ProductDetail({
 	const quantity = 1;
 	const productId = product.id;
 	const variantSizeId = selectedSize.id;
+	const variantColorId = selectedColor.id;
+
+	React.useEffect(() => {
+		console.log("selectedColor", selectedColor)
+		console.log("selectedSize", selectedSize)
+		console.log("selectedCourier", selectedCourier)
+		console.log("------------------------------------------------------")
+	}, [selectedColor,
+		selectedSize,
+		selectedCourier])
 
 	return (
 		<>
@@ -191,7 +201,9 @@ export default function ProductDetail({
 							quantity={quantity}
 							product_id={productId}
 							product_variant_size_id={variantSizeId}
+							product_variant_color_id={variantColorId}
 							customer_id={customerStaticId}
+							resetOnChange={{ selectedColor, selectedSize }}
 						/>
 						<AddToWishlist
 							slug={product.slug}
