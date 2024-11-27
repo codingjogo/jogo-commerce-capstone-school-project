@@ -4,7 +4,6 @@ import { useState } from "react";
 import { type ProductDetail, CourierOption, Review } from "@/lib/types";
 import { StarIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import {
 	Select,
 	SelectContent,
@@ -17,6 +16,8 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { ProductImagesCarousel } from "./product-images-carousel";
 import Reviews from "./reviews";
+import AddToBag from "./add-to-bag";
+import AddToWishlist from "./add-to-wishlist";
 
 interface ProductDetailProps {
 	product: ProductDetail;
@@ -37,11 +38,16 @@ export default function ProductDetail({
 	);
 	const [selectedCourier, setSelectedCourier] = useState(courierOptions[0]);
 
-	const images = selectedColor.images
+	const images = selectedColor.images;
 
 	const averageRating =
 		reviews.reduce((sum, review) => sum + review.rating, 0) /
 		reviews.length;
+
+	const customerStaticId = "6ccc554f-5530-4988-8331-ee08d91123bf";
+	const quantity = 1;
+	const productId = product.id;
+	const variantSizeId = selectedSize.id;
 
 	return (
 		<>
@@ -179,7 +185,20 @@ export default function ProductDetail({
 							</SelectContent>
 						</Select>
 					</div>
-					<Button className="w-full">Add to Cart</Button>
+					<div className="grid lg:grid-cols-2 gap-2">
+						<AddToBag
+							slug={product.slug}
+							quantity={quantity}
+							product_id={productId}
+							product_variant_size_id={variantSizeId}
+							customer_id={customerStaticId}
+						/>
+						<AddToWishlist
+							slug={product.slug}
+							product_variant_size_id={variantSizeId}
+							customer_id={customerStaticId}
+						/>
+					</div>
 				</div>
 			</div>
 			<div className="mt-12">
