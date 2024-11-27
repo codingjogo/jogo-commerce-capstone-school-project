@@ -9,3 +9,9 @@ export const bagSchema = z.object({
 });
 
 export type TCreateBag = z.infer<typeof bagSchema>;
+
+export const updateQuantitySchema = z.object({
+	id: z.string().uuid(),
+})
+
+export type TUpdateQuantity = z.infer<typeof updateQuantitySchema>;

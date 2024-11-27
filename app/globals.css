@@ -83,4 +83,12 @@ body {
   .text-admin-h1 {
     @apply text-4xl font-bold mb-6;
   }
+
+  /* Typography */
+  .heading-2 {
+    @apply text-3xl font-semibold;
+  }
+  .heading-3 {
+    @apply text-2xl font-semibold;
+  }
 }

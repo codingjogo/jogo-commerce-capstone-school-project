@@ -1,4 +1,4 @@
-import { PRODUCT_STATUS } from "@prisma/client";
+import { Prisma, PRODUCT_SIZES, PRODUCT_STATUS, SIZE_STATUS } from "@prisma/client";
 
 export interface ProductDetail {
   id: string;
@@ -61,3 +61,14 @@ export interface Category {
   name: string;
   slug: string;
 }
+
+export type TBag = Prisma.bagGetPayload<{
+  include: {
+    product: {
+      include: {
+        product_variant_color: true
+      }
+    },
+    product_variant_size: true
+  }
+}>
