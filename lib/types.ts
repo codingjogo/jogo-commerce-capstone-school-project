@@ -72,3 +72,17 @@ export type TBag = Prisma.bagGetPayload<{
     product_variant_size: true
   }
 }>
+
+export type TWishlist = Prisma.wishlistGetPayload<{
+  include: {
+    product_variant_size: {
+      include: {
+        product_variant_color: {
+          include: {
+            product: true
+          }
+        },
+      }
+    }
+  }
+}>

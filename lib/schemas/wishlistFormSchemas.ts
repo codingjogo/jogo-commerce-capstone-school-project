@@ -7,3 +7,9 @@ export const wishlistSchema = z.object({
 });
 
 export type TCreateWishlist = z.infer<typeof wishlistSchema>;
+
+export const deleteWishSchema = z.object({
+	id: z.string().uuid()
+})
+
+export type TDeleteWish = z.infer<typeof deleteWishSchema>;

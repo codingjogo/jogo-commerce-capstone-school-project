@@ -1,4 +1,4 @@
-import { HomeIcon, ShoppingBagIcon, StoreIcon } from "lucide-react";
+import { HeartIcon, HomeIcon, ShoppingBagIcon, StoreIcon } from "lucide-react";
 
 export const NAV_LINKS  = [
 	{
@@ -10,6 +10,11 @@ export const NAV_LINKS  = [
 		href: "/shop/products",
 		label: "Shop",
 		icon: StoreIcon,
+	},
+	{
+		href: "/wishlist",
+		label: "Wishlist",
+		icon: HeartIcon,
 	},
 	{
 		href: "/bag",

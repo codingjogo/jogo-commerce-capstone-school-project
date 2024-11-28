@@ -22,7 +22,6 @@ import { addToWishlist } from "../../_actions";
 import { HeartIcon } from "lucide-react";
 
 const AddToWishlist = ({
-	slug,
 	product_variant_size_id,
 	customer_id,
 }: {
@@ -42,7 +41,7 @@ const AddToWishlist = ({
 		try {
 			const validatedData = wishlistSchema.parse(values);
 
-			await addToWishlist(validatedData, slug);
+			await addToWishlist(validatedData);
 			alert("Product added to wishlist!");
 			form.reset();
 		} catch (error) {
