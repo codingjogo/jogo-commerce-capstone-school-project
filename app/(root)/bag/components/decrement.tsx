@@ -18,8 +18,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { MinusCircleIcon } from "lucide-react";
+import { useBagStore } from "@/stores/useBagStore";
 
 const Decrement = ({ bagItemId }: { bagItemId: string }) => {
+	const decreaseQuantity = useBagStore((state) => state.decreaseQuantity)
+	
 	const form = useForm<TUpdateQuantity>({
 		resolver: zodResolver(updateQuantitySchema),
 		defaultValues: {
@@ -31,6 +34,7 @@ const Decrement = ({ bagItemId }: { bagItemId: string }) => {
 		values: TUpdateQuantity
 	) => {
 		try {
+			decreaseQuantity(values.id);
 			await decrementQuantity(values);
 		} catch (error) {
 			console.log("FAILED TO UPDATE QUANTITY: " + error);

@@ -21,8 +21,6 @@ export async function incrementQuantity(values: TUpdateQuantity) {
 		}
 		console.log("ZOD_ERROR_INCREMENT_QUANTITY_[ACTION]");
 	}
-
-	revalidatePath("/bag");
 }
 
 export async function decrementQuantity(values: TUpdateQuantity) {

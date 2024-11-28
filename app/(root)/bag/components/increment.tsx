@@ -1,3 +1,5 @@
+'use client';
+
 import {
 	TUpdateQuantity,
 	updateQuantitySchema,
@@ -18,8 +20,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PlusCircleIcon } from "lucide-react";
+import { useBagStore } from "@/stores/useBagStore";
 
 const Increment = ({ bagItemId }: { bagItemId: string }) => {
+	const increaseQuantity = useBagStore((state) => state.increaseQuantity);
+
 	const form = useForm<TUpdateQuantity>({
 		resolver: zodResolver(updateQuantitySchema),
 		defaultValues: {
@@ -31,6 +36,7 @@ const Increment = ({ bagItemId }: { bagItemId: string }) => {
 		values: TUpdateQuantity
 	) => {
 		try {
+			increaseQuantity(values.id)
 			await incrementQuantity(values);
 		} catch (error) {
 			console.log("FAILED TO UPDATE QUANTITY: " + error);

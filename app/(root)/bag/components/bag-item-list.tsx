@@ -9,6 +9,7 @@ import { HeartIcon } from "lucide-react";
 import { CldImage } from "next-cloudinary";
 import React from "react";
 import ChangeQuantity from "./change-quantity";
+import { useBagStore } from "@/stores/useBagStore";
 
 const BagItemList = ({
 	bagItems,
@@ -17,9 +18,16 @@ const BagItemList = ({
 	bagItems: TBag[];
 	categories: category[];
 }) => {
+	const setBagItems = useBagStore((state) => state.setBagItems);
+	const items = useBagStore((state) => state.bagItems)
+
+	React.useEffect(() => {
+    setBagItems(bagItems); // Initialize Zustand store with fetched data
+  }, [bagItems, setBagItems]);
+
 	return (
 		<div>
-      {bagItems.length === 0 && (
+      {items.length === 0 && (
         <Card>
           <CardContent className="p-4">
             <h1 className="text-center text-admin-h1">Your Bag is Empty</h1>
@@ -29,11 +37,13 @@ const BagItemList = ({
           </CardContent>
         </Card>
       )}
-			{bagItems.length > 0 && bagItems.map((item) => {
+			{items.length > 0 && items.map((item) => {
 				const bagItemId = item.id;
-				const firstImage = item.product.product_variant_color.map(
-					(color) => color.images
-				)[0][0];
+				const firstImage = item.product.product_variant_color.find(
+					(c) =>
+						c.id ===
+						item.product_variant_size.product_variant_color_id
+				)?.images[0];
 				const productName = item.product.name;
 				const productCategory = categories.find(
 					(c) => c.id === item.product.category_id
