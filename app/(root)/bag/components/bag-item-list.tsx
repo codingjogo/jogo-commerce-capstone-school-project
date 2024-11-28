@@ -43,7 +43,7 @@ const BagItemList = ({
 					(c) =>
 						c.id ===
 						item.product_variant_size.product_variant_color_id
-				)?.images[0];
+				)?.images[0] || '';
 				const productName = item.product.name;
 				const productCategory = categories.find(
 					(c) => c.id === item.product.category_id
