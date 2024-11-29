@@ -3,7 +3,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname	 } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { NAV_LINKS } from "@/lib/constants";
 import RootMobileNavLinks from "./RootMobileNavLinks";
@@ -12,7 +12,7 @@ import { LayoutDashboardIcon } from "lucide-react";
 
 const RootNavLinks = () => {
 	const pathname = usePathname();
-	const router = useRouter();
+	// const router = useRouter();
 
 	return (
 		<>
@@ -44,8 +44,10 @@ const RootNavLinks = () => {
 					})}
 				</ul>
 				<div className="hidden md:block">
-					<SignedIn>
-						{/* Mount the UserButton component */}
+					<Button type="button" asChild>
+						<Link href={"/profile"}>My Profile</Link>
+					</Button>
+					{/* <SignedIn>
 						<UserButton>
 							<UserButton.MenuItems>
 								<UserButton.Action
@@ -55,13 +57,12 @@ const RootNavLinks = () => {
 								/>
 							</UserButton.MenuItems>
 						</UserButton>
-					</SignedIn>
+					</SignedIn> */}
 				</div>
 			</div>
 
 			<div className="flex md:hidden gap-4">
 				<SignedIn>
-					{/* Mount the UserButton component */}
 					<UserButton>
 						<UserButton.MenuItems>
 							<UserButton.Action
