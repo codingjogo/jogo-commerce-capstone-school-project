@@ -1,6 +1,7 @@
 import React from "react";
 import BagItemList from "./components/bag-item-list";
 import prisma from "@/lib/db";
+import OrderSummary from "./components/order-summary";
 
 const BagPage = async () => {
 	const bagItems = await prisma.bag.findMany({
@@ -22,7 +23,10 @@ const BagPage = async () => {
 	return (
 		<section className="container py-6">
 			<h1 className="text-4xl mb-6">Your Bag</h1>
-			<BagItemList bagItems={bagItems} categories={categories} />
+			<div className="flex flex-col lg:flex-row items-start gap-6">
+				<BagItemList bagItems={bagItems} categories={categories} />
+				<OrderSummary />
+			</div>
 		</section>
 	);
 };

@@ -57,7 +57,7 @@ const AddToWishlist = ({
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit, onError)}>
+			<form onSubmit={form.handleSubmit(onSubmit, onError)} className="ml-auto lg:ml-0">
 				<FormField
 					control={form.control}
 					name="customer_id"

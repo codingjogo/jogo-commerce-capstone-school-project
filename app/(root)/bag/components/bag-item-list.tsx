@@ -25,7 +25,7 @@ const BagItemList = ({
 	}, [bagItems, setBagItems]);
 
 	return (
-		<div>
+		<div className="w-full lg:flex-1">
 			{items.length === 0 && (
 				<Card>
 					<CardContent className="p-4">
@@ -38,6 +38,7 @@ const BagItemList = ({
 					</CardContent>
 				</Card>
 			)}
+			<div className="grid gap-2 lg:gap-6">
 			{items.length > 0 &&
 				items.map((item) => {
 					const bagItemId = item.id;
@@ -67,7 +68,7 @@ const BagItemList = ({
 
 					return (
 						<Card key={item.id}>
-							<CardContent className="flex gap-6 p-4">
+							<CardContent className="flex flex-col lg:flex-row gap-6 p-4">
 								{/* Image */}
 								<div className="relative w-24 aspect-square">
 									<CldImage
@@ -80,7 +81,7 @@ const BagItemList = ({
 
 								{/* Product Details */}
 								<div className="flex-1 flex flex-col justify-between gap-6">
-									<div className="flex-1 flex gap-6">
+									<div className="flex-1 flex flex-col lg:flex-row gap-6">
 										{/* Name and Category */}
 										<div className="space-y-1">
 											<h2 className="heading-2">
@@ -95,7 +96,7 @@ const BagItemList = ({
 										</div>
 
 										{/* Description */}
-										<div className="flex-1 flex justify-between gap-6">
+										<div className="flex-1 flex flex-col lg:flex-row justify-between gap-6">
 											<p>{productDescription}</p>
 
 											<div>
@@ -107,7 +108,7 @@ const BagItemList = ({
 										</div>
 									</div>
 
-									<div className="flex justify-between">
+									<div className="flex flex-col lg:flex-row gap-4 lg:gap-0 justify-between">
 										{/* Price */}
 										<div>
 											<h3 className="heading-3">
@@ -134,6 +135,7 @@ const BagItemList = ({
 						</Card>
 					);
 				})}
+			</div>
 		</div>
 	);
 };
