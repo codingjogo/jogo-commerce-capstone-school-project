@@ -13,3 +13,10 @@ export const addressSchema = z.object({
 });
 
 export type TCreateAddress = z.infer<typeof addressSchema>;
+
+export const addressDefaultSchema = z.object({
+	id: z.string().uuid(),
+	is_default: z.boolean(),
+})
+
+export type TToggleDefaultAddres = z.infer<typeof addressDefaultSchema>;

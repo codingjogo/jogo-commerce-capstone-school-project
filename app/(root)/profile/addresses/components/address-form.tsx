@@ -25,7 +25,6 @@ import {
 } from "@/components/ui/card";
 
 const AddressForm = () => {
-	// 1. Define your form.
 	const form = useForm<TCreateAddress>({
 		resolver: zodResolver(addressSchema),
 		defaultValues: {
@@ -40,7 +39,6 @@ const AddressForm = () => {
 		},
 	});
 
-	// 2. Define a submit handler.
 	const onSubmit: SubmitHandler<TCreateAddress> = async (
 		values: TCreateAddress
 	) => {

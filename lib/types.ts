@@ -86,3 +86,9 @@ export type TWishlist = Prisma.wishlistGetPayload<{
     }
   }
 }>
+
+export type TAddress = Prisma.addressGetPayload<{
+  include: {
+    customer: true
+  }
+}>;
