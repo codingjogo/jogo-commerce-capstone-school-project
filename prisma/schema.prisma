@@ -80,13 +80,16 @@ model bag {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model customer {
-  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  created_at DateTime   @default(now()) @db.Timestamptz(6)
-  updated_at DateTime?  @db.Timestamptz(6)
-  email      String     @unique
-  address    address[]
-  bag        bag[]
-  wishlist   wishlist[]
+  id            String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at    DateTime   @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime?  @db.Timestamptz(6)
+  email         String     @unique
+  clerk_user_id String?    @unique @default("")
+  first_name    String
+  last_name     String
+  address       address[]
+  bag           bag[]
+  wishlist      wishlist[]
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.

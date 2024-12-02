@@ -20,7 +20,7 @@ const Addresses = ({ addresses }: { addresses: TAddress[] }) => {
 	}, [setAddresses, addresses, storeAddresses]);
 
 	return (
-		<div>
+		<div className="grid gap-6">
 			{storeAddresses.map((address) => {
 				const {
 					house_number,

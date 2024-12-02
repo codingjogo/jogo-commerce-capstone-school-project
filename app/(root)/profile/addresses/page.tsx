@@ -4,10 +4,28 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
 import Addresses from "./components/addresses";
+import { currentUser } from "@clerk/nextjs/server";
 
 const AddressesPage = async () => {
+	const user = await currentUser();
+
+	if (!user) {
+		notFound();
+	}
+
+	const user_id = await prisma.customer.findFirst({
+		where: { clerk_user_id: user.id },
+		select: {
+			id: true
+		}
+	})
+
+	if (!user_id) {
+		notFound();
+	}
+
 	const addresses = await prisma.address.findMany({
-		where: { customer_id: "6ccc554f-5530-4988-8331-ee08d91123bf" },
+		where: { customer_id: user_id.id },
 		include: {
 			customer: true,
 		},

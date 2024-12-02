@@ -24,7 +24,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 
-const AddressForm = () => {
+const AddressForm = ({customer_id} : { customer_id: string;}) => {
 	const form = useForm<TCreateAddress>({
 		resolver: zodResolver(addressSchema),
 		defaultValues: {
@@ -35,7 +35,7 @@ const AddressForm = () => {
 			province: "test-province",
 			zip_code: "test-zip_code",
 			is_default: false,
-			customer_id: "6ccc554f-5530-4988-8331-ee08d91123bf",
+			customer_id: customer_id,
 		},
 	});
 

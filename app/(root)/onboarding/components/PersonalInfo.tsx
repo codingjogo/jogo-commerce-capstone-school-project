@@ -16,28 +16,28 @@ const PersonalInfo = () => {
 			<h2 className="text-2xl mb-2">Personal Information</h2>
 			<div className="space-y-4">
 				<div>
-					<Label htmlFor="firstName">First Name</Label>
+					<Label htmlFor="first_name">First Name</Label>
 					<Input
-						id="firstName"
+						id="first_name"
 						type="text"
-						{...register("firstName")}
+						{...register("first_name")}
 					/>
-					{errors.firstName && (
+					{errors.first_name && (
 						<p className="text-red-600">
-							{errors.firstName.message?.toString()}
+							{errors.first_name.message?.toString()}
 						</p>
 					)}
 				</div>
 				<div>
-					<Label htmlFor="lastName">Last Name</Label>
+					<Label htmlFor="last_name">Last Name</Label>
 					<Input
-						id="lastName"
+						id="last_name"
 						type="text"
-						{...register("lastName")}
+						{...register("last_name")}
 					/>
-					{errors.lastName && (
+					{errors.last_name && (
 						<p className="text-red-600">
-							{errors.lastName.message?.toString()}
+							{errors.last_name.message?.toString()}
 						</p>
 					)}
 				</div>
